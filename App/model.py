@@ -30,26 +30,15 @@ from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
 
-"""
-Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
-los mismos.
-"""
 
 
 # Construccion de modelos
 def newCatalog():
-    """
-    Inicializa el catálogo de videos. Crea una lista vacia para guardar
-    todos los videos, adicionalmente, crea una lista vacia para los autores,
-    una lista vacia para los generos y una lista vacia para la asociación
-    generos y libros. Retorna el catalogo inicializado.
-    """
     catalog = {'videos': None,
                'categories': None}
 
     catalog['videos'] = lt.newList()
     catalog['categories'] = lt.newList("ARRAY_LIST", cmpfunction=comparecat)
-
 
     return catalog
 
@@ -81,5 +70,6 @@ def comparecat(cat1, cat):
     if (cat1 in cat['id']):
         return 0
     return -1
+
 
 # Funciones de ordenamiento

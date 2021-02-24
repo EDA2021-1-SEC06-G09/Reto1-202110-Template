@@ -97,9 +97,11 @@ while True:
         if int(number) > lt.size(catalog["videos"]):
             print("Numero de videos a listar muy grande")
         else:
-            videos = controller.getBestViews(catalog, category_name, country, int(number), ordenamiento )
+            result = controller.getBestViews(catalog, category_name, country, int(number), ordenamiento )
             print("TOP " + number + " VIDEOS DE " + str(category_name) + " EN " + str(country) + ":")
-            printBestViews(videos)
+            printBestViews(result[1])
+            print("Para la muestra de", number, " elementos, el tiempo (mseg) es: ",
+                                          str(result[0]))
 
     elif int(inputs[0]) == 3:
         pass

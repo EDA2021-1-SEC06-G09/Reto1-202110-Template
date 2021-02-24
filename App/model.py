@@ -25,12 +25,14 @@
  """
 
 
+from DISClib.DataStructures.arraylist import subList
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as shell
 from DISClib.Algorithms.Sorting import selectionsort as selection
 from DISClib.Algorithms.Sorting import insertionsort as insertion
 assert cf
+import time
 
 
 
@@ -67,9 +69,8 @@ def newcategory(name, id):
 
 # Funciones de consulta
 def getBestViews(catalog, category_name, country, nvideos, ordenamiento):
-    sortVideoViews(catalog, ordenamiento)
-    bestviews = lt.subList(catalog["videos"], 1, nvideos)
-    return bestviews
+
+    return sortVideoViews(catalog, ordenamiento, nvideos)
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 def comparecat(cat1, cat):
@@ -82,10 +83,17 @@ def cmpVideosByViews(video1, video2):
 
 
 # Funciones de ordenamiento
-def sortVideoViews(catalog, ordenamiento):
+def sortVideoViews(catalog, ordenamiento, size):
+    sub_list = lt.subList(catalog["videos"], 0, size)
+    sub_list = sub_list.copy()
+    start_time = time.process_time()
+    
     if ordenamiento == "shell":
-        shell.sort(catalog["videos"], cmpVideosByViews)
+        sorted_list = shell.sort(sub_list, cmpVideosByViews)
     elif ordenamiento == "selection":
-        selection.sort(catalog["videos"], cmpVideosByViews)
+        sorted_list = selection.sort(sub_list, cmpVideosByViews)
     else:
-        insertion.sort(catalog["videos"], cmpVideosByViews)
+        sorted_list = insertion.sort(sub_list, cmpVideosByViews)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time) *1000
+    return elapsed_time_mseg, sorted_list

@@ -68,9 +68,9 @@ def newcategory(name, id):
 
 
 # Funciones de consulta
-def getBestViews(catalog, category_name, country, nvideos, ordenamiento):
+def getBestViews(catalog, category_name, country, sample, ordenamiento):
 
-    return sortVideoViews(catalog, ordenamiento, nvideos)
+    return sortVideoViews(catalog, ordenamiento, sample)
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 def comparecat(cat1, cat):

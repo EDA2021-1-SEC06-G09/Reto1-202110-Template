@@ -59,8 +59,8 @@ def printFirstVideo(catalog):
         ", Dia de tendencia: " + firstVideo["trending_date"] + ", Pais: " + firstVideo["country"] + 
         ", Vistas: " + firstVideo["views"] + ", Likes: " + firstVideo["likes"] + ", Dislikes: " + firstVideo["dislikes"])
     
-def printBestViews(videos):
-    for n in range (1,lt.size(videos)+1):
+def printBestViews(videos, number):
+    for n in range (1,number+1):
         video = lt.getElement(videos, n)
         print("\nDia de tendencia: " + video["trending_date"] + ", Titulo: " + video["title"] +
             ", Canal: " + video["channel_title"] +", Tiempo de publicacion: " +video["publish_time"] +
@@ -92,15 +92,16 @@ while True:
     elif int(inputs[0]) == 2:
         category_name = None#input("Nombre de la categoria a buscar: ")
         country = None#input("Nombre del pais a buscar: ")
-        number = input("Numero de videos a listar: ")
-        ordenamiento = input("Tipo de ordenamiento dde datos a implementar(selection, insertion o shell): ")
-        if int(number) > lt.size(catalog["videos"]):
-            print("Numero de videos a listar muy grande")
+        number = 10 #input("Numero de videos a listar: ")
+        sample = input("Numero de datos a utilizar para la muestra: ")
+        ordenamiento = input("Tipo de ordenamiento de datos a implementar(selection, insertion o shell): ")
+        if int(sample) > lt.size(catalog["videos"]):
+            print("Numero de datos a utilizar muy grande")
         else:
-            result = controller.getBestViews(catalog, category_name, country, int(number), ordenamiento )
-            print("TOP " + number + " VIDEOS DE " + str(category_name) + " EN " + str(country) + ":")
-            printBestViews(result[1])
-            print("Para la muestra de", number, " elementos, el tiempo (mseg) es: ",
+            result = controller.getBestViews(catalog, category_name, country, int(sample), ordenamiento )
+            print("TOP " + str(number) + " VIDEOS DE " + str(category_name) + " EN " + str(country) + ":")
+            printBestViews(result[1], number)
+            print("Para la muestra de", int(sample), " elementos, el tiempo (mseg) es: ",
                                           str(result[0]))
 
     elif int(inputs[0]) == 3:

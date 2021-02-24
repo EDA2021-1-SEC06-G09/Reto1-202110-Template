@@ -27,17 +27,19 @@
 
 import config as cf
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import shellsort as shell
+from DISClib.Algorithms.Sorting import selectionsort as selection
+from DISClib.Algorithms.Sorting import insertionsort as insertion
 assert cf
 
 
 
 # Construccion de modelos
-def newCatalog():
+def newCatalog(tipo):
     catalog = {'videos': None,
                'categories': None}
 
-    catalog['videos'] = lt.newList()
+    catalog['videos'] = lt.newList(tipo)
     catalog['categories'] = lt.newList("ARRAY_LIST", cmpfunction=comparecat)
 
     return catalog
@@ -64,6 +66,10 @@ def newcategory(name, id):
 
 
 # Funciones de consulta
+def getBestViews(catalog, category_name, country, nvideos, ordenamiento):
+    sortVideoViews(catalog, ordenamiento)
+    bestviews = lt.subList(catalog["videos"], 1, nvideos)
+    return bestviews
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 def comparecat(cat1, cat):
@@ -71,5 +77,15 @@ def comparecat(cat1, cat):
         return 0
     return -1
 
+def cmpVideosByViews(video1, video2):
+    return (int(video1["views"]) > int(video2["views"]))
+
 
 # Funciones de ordenamiento
+def sortVideoViews(catalog, ordenamiento):
+    if ordenamiento == "shell":
+        shell.sort(catalog["videos"], cmpVideosByViews)
+    elif ordenamiento == "selection":
+        selection.sort(catalog["videos"], cmpVideosByViews)
+    else:
+        insertion.sort(catalog["videos"], cmpVideosByViews)

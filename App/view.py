@@ -46,38 +46,60 @@ def printMenu():
 
 catalog = None
 
-def initCatalog():
-    return controller.initCatalog()
+def initCatalog(tipo):
+    return controller.initCatalog(tipo)
 
 
 def loadData(catalog):
     controller.loadData(catalog)
 
+def printFirstVideo(catalog):
+    firstVideo = lt.getElement(catalog["videos"], 1)
+    print("Titulo: " + firstVideo["title"] + ", Canal: " + firstVideo["channel_title"] +
+        ", Dia de tendencia: " + firstVideo["trending_date"] + ", Pais: " + firstVideo["country"] + 
+        ", Vistas: " + firstVideo["views"] + ", Likes: " + firstVideo["likes"] + ", Dislikes: " + firstVideo["dislikes"])
+    
+def printBestViews(videos):
+    for n in range (1,lt.size(videos)+1):
+        video = lt.getElement(videos, n)
+        print("\nDia de tendencia: " + video["trending_date"] + ", Titulo: " + video["title"] +
+            ", Canal: " + video["channel_title"] +", Tiempo de publicacion: " +video["publish_time"] +
+            ", Vistas: " + video["views"] + ", Likes: " + video["likes"] + ", Dislikes: " + video["dislikes"])
+
 """
 Menu principal
 """
+tipo = None
+
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
+        tipo = input("Tipo de lista a implementar para el catalogo de videos(ARRAY_LIST o LINKED_LIST): ")
         print("Cargando información de los archivos ....")
-        catalog = initCatalog()
+        catalog = initCatalog(tipo)
         loadData(catalog)
         print("No. Videos cargados: " + str(lt.size(catalog["videos"])))
         print("No. Categorías cargadas: " + str(lt.size(catalog["categories"])))
 
         print("\nPRIMER VIDEO CARGADO:")
-        firstVideo = lt.getElement(catalog["videos"], 0)
-        print("Titulo: " + firstVideo["title"] + ", Canal: " + firstVideo["channel_title"] +
-                ", Dia de tendencia: " + firstVideo["trending_date"] + ", Pais: " + firstVideo["country"] + 
-                ", Vistas: " + firstVideo["views"] + ", Likes: " + firstVideo["likes"] + ", Dislikes: " + firstVideo["dislikes"])
+        printFirstVideo(catalog)
             
         print("\nCATEGORIAS CARGADAS:")
         for n in range(1,lt.size(catalog["categories"])+1):
             print(lt.getElement(catalog["categories"], n))
 
     elif int(inputs[0]) == 2:
-        pass
+        category_name = None#input("Nombre de la categoria a buscar: ")
+        country = None#input("Nombre del pais a buscar: ")
+        number = input("Numero de videos a listar: ")
+        ordenamiento = input("Tipo de ordenamiento dde datos a implementar(selection, insertion o shell): ")
+        if int(number) > lt.size(catalog["videos"]):
+            print("Numero de videos a listar muy grande")
+        else:
+            videos = controller.getBestViews(catalog, category_name, country, int(number), ordenamiento )
+            print("TOP " + number + " VIDEOS DE " + str(category_name) + " EN " + str(country) + ":")
+            printBestViews(videos)
 
     elif int(inputs[0]) == 3:
         pass

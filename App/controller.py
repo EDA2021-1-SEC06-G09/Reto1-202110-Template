@@ -28,8 +28,8 @@ from DISClib.ADT import list as lt
 
 
 # Inicialización del Catálogo de libros
-def initCatalog():
-    catalog = model.newCatalog()
+def initCatalog(tipo):
+    catalog = model.newCatalog(tipo)
     return catalog
 
 # Funciones para la carga de datos
@@ -55,3 +55,5 @@ def loadCategorys(catalog):
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
+def getBestViews(catalog, category_name, country, nvideos, ordenamiento):
+    return model.getBestViews(catalog, category_name, country, nvideos, ordenamiento)

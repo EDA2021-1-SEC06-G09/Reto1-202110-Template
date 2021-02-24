@@ -99,10 +99,11 @@ while True:
             print("Numero de datos a utilizar muy grande")
         else:
             result = controller.getBestViews(catalog, category_name, country, int(sample), ordenamiento )
-            print("TOP " + str(number) + " VIDEOS DE " + str(category_name) + " EN " + str(country) + ":")
+            print("\nTOP " + str(number) + " VIDEOS DE " + str(category_name) + " EN " + str(country) + ":")
             printBestViews(result[1], number)
-            print("Para la muestra de", int(sample), " elementos, el tiempo (mseg) es: ",
+            print("\nPara la muestra de", int(sample), " elementos, el tiempo (mseg) es: ",
                                           str(result[0]))
+            result[1].clear()
 
     elif int(inputs[0]) == 3:
         pass

@@ -84,8 +84,8 @@ def cmpVideosByViews(video1, video2):
 
 # Funciones de ordenamiento
 def sortVideoViews(catalog, ordenamiento, size):
-    sub_list = lt.subList(catalog["videos"], 0, size)
-    sub_list = sub_list.copy()
+    sub_list1 = lt.subList(catalog["videos"], 0, size)
+    sub_list = sub_list1.copy()
     start_time = time.process_time()
     
     if ordenamiento == "shell":
@@ -96,4 +96,5 @@ def sortVideoViews(catalog, ordenamiento, size):
         sorted_list = insertion.sort(sub_list, cmpVideosByViews)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time) *1000
+    sub_list1.clear()
     return elapsed_time_mseg, sorted_list

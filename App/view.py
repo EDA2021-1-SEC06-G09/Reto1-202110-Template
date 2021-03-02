@@ -94,7 +94,7 @@ while True:
         country = None#input("Nombre del pais a buscar: ")
         number = 10 #input("Numero de videos a listar: ")
         sample = input("Numero de datos a utilizar para la muestra: ")
-        ordenamiento = input("Tipo de ordenamiento de datos a implementar(selection, insertion o shell): ")
+        ordenamiento = input("Tipo de ordenamiento de datos a implementar(merge o quick): ")
         if int(sample) > lt.size(catalog["videos"]):
             print("Numero de datos a utilizar muy grande")
         else:

@@ -28,9 +28,8 @@
 from DISClib.DataStructures.arraylist import subList
 import config as cf
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import shellsort as shell
-from DISClib.Algorithms.Sorting import selectionsort as selection
-from DISClib.Algorithms.Sorting import insertionsort as insertion
+from DISClib.Algorithms.Sorting import quicksort as quick
+from DISClib.Algorithms.Sorting import mergesort as merge
 assert cf
 import time
 
@@ -88,12 +87,10 @@ def sortVideoViews(catalog, ordenamiento, size):
     sub_list = sub_list1.copy()
     start_time = time.process_time()
     
-    if ordenamiento == "shell":
-        sorted_list = shell.sort(sub_list, cmpVideosByViews)
-    elif ordenamiento == "selection":
-        sorted_list = selection.sort(sub_list, cmpVideosByViews)
-    else:
-        sorted_list = insertion.sort(sub_list, cmpVideosByViews)
+    if ordenamiento == "merge":
+        sorted_list = merge.sort(sub_list, cmpVideosByViews)
+    elif ordenamiento == "quick":
+        sorted_list = quick.sort(sub_list, cmpVideosByViews)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time) *1000
     sub_list1.clear()

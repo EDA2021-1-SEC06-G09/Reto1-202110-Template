@@ -67,9 +67,40 @@ def newcategory(name, id):
 
 
 # Funciones de consulta
-def getBestViews(catalog, category_name, country, sample, ordenamiento):
+def binarySearch(lst, elemento):
+    i = 0
+    f = len(lst)-1
+    pos = -1
+    found = False
+    while i <= f and not found:
+        m = (i+f)//2
+        if lst[m] == elemento:
+            pos = m
+            found = True
+        elif lst[m] > elemento:
+            f = m-1
+        else:
+            i = m+1
+    return pos
 
-    return sortVideoViews(catalog, ordenamiento, sample)
+
+def getCategoryId(catalog, category_name):
+    for n in range(1,lt.size(catalog["categories"])+1):
+        category = lt.getElement(catalog["categories"], n)
+        if category["name"] == category_name:
+            return category["id"]
+
+
+
+def getBestViews(catalog, category_id, country, sample, ordenamiento):
+    sub_list1 = lt.subList(catalog["videos"], 0, sample)
+    sub_list = sub_list1.copy()
+    sub_list1.clear()
+    sorted_list = sortVideoCountry(sub_list)
+
+
+
+    return sortVideoViews(sorted_list, ordenamiento, sample)
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 def comparecat(cat1, cat):
@@ -80,11 +111,17 @@ def comparecat(cat1, cat):
 def cmpVideosByViews(video1, video2):
     return (int(video1["views"]) > int(video2["views"]))
 
+def cmpVideosByCountryCategory(video1, video2):
+    return ((video1["country"] < video2["country"]) and (video1["category_id"] < video2["category_id"]))
+
 
 # Funciones de ordenamiento
-def sortVideoViews(catalog, ordenamiento, size):
-    sub_list1 = lt.subList(catalog["videos"], 0, size)
-    sub_list = sub_list1.copy()
+def sortVideoCountry(videos):
+    return merge.sort(videos, cmpVideosByCountryCategory)
+
+def sortVideoViews(sub_list, ordenamiento, size):
+    #sub_list1 = lt.subList(catalog["videos"], 0, size)
+    #sub_list = sub_list1.copy()
     start_time = time.process_time()
     
     if ordenamiento == "merge":
@@ -93,5 +130,5 @@ def sortVideoViews(catalog, ordenamiento, size):
         sorted_list = quick.sort(sub_list, cmpVideosByViews)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time) *1000
-    sub_list1.clear()
+    #sub_list1.clear()
     return elapsed_time_mseg, sorted_list

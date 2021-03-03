@@ -55,5 +55,8 @@ def loadCategorys(catalog):
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
-def getBestViews(catalog, category_name, country, sample, ordenamiento):
-    return model.getBestViews(catalog, category_name, country, sample, ordenamiento)
+def getCategoryId(catalog, category_name):
+    return model.getCategoryId(catalog, category_name)
+
+def getBestViews(catalog, category_id, country, sample, ordenamiento):
+    return model.getBestViews(catalog, category_id, country, sample, ordenamiento)

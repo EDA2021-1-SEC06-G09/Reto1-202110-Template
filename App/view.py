@@ -90,15 +90,17 @@ while True:
             print(lt.getElement(catalog["categories"], n))
 
     elif int(inputs[0]) == 2:
-        category_name = None#input("Nombre de la categoria a buscar: ")
-        country = None#input("Nombre del pais a buscar: ")
+        category_name = input("Nombre de la categoria a buscar: ")
+        country = input("Nombre del pais a buscar: ")
         number = 10 #input("Numero de videos a listar: ")
         sample = input("Numero de datos a utilizar para la muestra: ")
         ordenamiento = input("Tipo de ordenamiento de datos a implementar(merge o quick): ")
         if int(sample) > lt.size(catalog["videos"]):
             print("Numero de datos a utilizar muy grande")
         else:
-            result = controller.getBestViews(catalog, category_name, country, int(sample), ordenamiento )
+            category_id = controller.getCategoryId(catalog, category_name)
+
+            result = controller.getBestViews(catalog, category_id, country, int(sample), ordenamiento )
             print("\nTOP " + str(number) + " VIDEOS DE " + str(category_name) + " EN " + str(country) + ":")
             printBestViews(result[1], number)
             print("\nPara la muestra de", int(sample), " elementos, el tiempo (mseg) es: ",

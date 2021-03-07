@@ -36,12 +36,12 @@ import time
 
 
 # Construccion de modelos
-def newCatalog(tipo):
+def newCatalog():
     catalog = {'videos': None,
                'categories': None}
 
-    catalog['videos'] = lt.newList(tipo)
-    catalog['categories'] = lt.newList("ARRAY_LIST", cmpfunction=comparecat)
+    catalog['videos'] = lt.newList('ARRAY_LIST')
+    catalog['categories'] = lt.newList('ARRAY_LIST', cmpfunction=comparecat)
 
     return catalog
 
@@ -87,48 +87,40 @@ def binarySearch(lst, elemento):
 def getCategoryId(catalog, category_name):
     for n in range(1,lt.size(catalog["categories"])+1):
         category = lt.getElement(catalog["categories"], n)
-        if category["name"] == category_name:
+        if category["name"].lower() == category_name.lower():
             return category["id"]
+    return None
 
 
 
-def getBestViews(catalog, category_id, country, sample, ordenamiento):
-    sub_list1 = lt.subList(catalog["videos"], 0, sample)
-    sub_list = sub_list1.copy()
-    sub_list1.clear()
-    sorted_list = sortVideoCountry(sub_list)
+def getBestViews(catalog, category_id, country):
+    listcopy = catalog["videos"].copy()
+    sorted_list = sortVideoCountry(listcopy)
 
-
-
-    return sortVideoViews(sorted_list, ordenamiento, sample)
+    return sortVideoViews(sorted_list)
 
 # Funciones utilizadas para comparar elementos dentro de una lista
+
 def comparecat(cat1, cat):
     if (cat1 in cat['id']):
         return 0
     return -1
 
+
 def cmpVideosByViews(video1, video2):
     return (int(video1["views"]) > int(video2["views"]))
+
 
 def cmpVideosByCountryCategory(video1, video2):
     return ((video1["country"] < video2["country"]) and (video1["category_id"] < video2["category_id"]))
 
 
 # Funciones de ordenamiento
+
 def sortVideoCountry(videos):
     return merge.sort(videos, cmpVideosByCountryCategory)
 
-def sortVideoViews(sub_list, ordenamiento, size):
-    #sub_list1 = lt.subList(catalog["videos"], 0, size)
-    #sub_list = sub_list1.copy()
-    start_time = time.process_time()
-    
-    if ordenamiento == "merge":
-        sorted_list = merge.sort(sub_list, cmpVideosByViews)
-    elif ordenamiento == "quick":
-        sorted_list = quick.sort(sub_list, cmpVideosByViews)
-    stop_time = time.process_time()
-    elapsed_time_mseg = (stop_time - start_time) *1000
-    #sub_list1.clear()
-    return elapsed_time_mseg, sorted_list
+
+def sortVideoViews(listcopy):    
+    sorted_list = quick.sort(listcopy, cmpVideosByViews)
+    return sorted_list

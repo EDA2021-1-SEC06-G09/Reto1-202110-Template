@@ -66,21 +66,18 @@ def printFirstVideo(catalog):
     print("Titulo: " + firstVideo["title"] + ", Canal: " + firstVideo["channel_title"] +
         ", Dia de tendencia: " + firstVideo["trending_date"] + ", Pais: " + firstVideo["country"] + 
         ", Vistas: " + firstVideo["views"] + ", Likes: " + firstVideo["likes"] + ", Dislikes: " + firstVideo["dislikes"])
-    
+
 
 def printBestViews(videos, number):
-    if lt.isEmpty(videos):
-        print("\nNo se encontro informacion para ese pais")
+    if number < lt.size(videos):
+        toprange = number+1
     else:
-        if number < lt.size(videos):
-            toprange = number+1
-        else:
-            toprange = lt.size(videos)+1
-        for n in range (1,toprange):
-            video = lt.getElement(videos, n)
-            print("\nDia de tendencia: " + video["trending_date"] + ", Titulo: " + video["title"] +
-                ", Canal: " + video["channel_title"] +", Tiempo de publicacion: " +video["publish_time"] +
-                ", Vistas: " + video["views"] + ", Likes: " + video["likes"] + ", Dislikes: " + video["dislikes"])
+        toprange = lt.size(videos)+1
+    for n in range (1,toprange):
+        video = lt.getElement(videos, n)
+        print("\nDia de tendencia: " + video["trending_date"] + ", Titulo: " + video["title"] +
+            ", Canal: " + video["channel_title"] +", Tiempo de publicacion: " +video["publish_time"] +
+            ", Vistas: " + video["views"] + ", Likes: " + video["likes"] + ", Dislikes: " + video["dislikes"])
 
 
 def printTrendCategory(result, category_id):
@@ -118,11 +115,14 @@ while True:
         if category_id != None:
             country = input("Nombre del pais a buscar: ")
             number = input("Numero de videos a listar: ")
-        
-            result = controller.getBestViews(catalog, category_id, country)
-            print("\nTOP " + number + " VIDEOS DE " + category_name.upper() + " EN " + country.upper() + ":")
-            printBestViews(result, int(number))
-        
+
+            result = controller.getBestViews(catalog, category_id, country.lower())
+            if lt.isEmpty(result):
+                print("\nNo se encontro informacion para ese pais")
+            else:
+                print("\nTOP " + number + " VIDEOS DE " + category_name.upper() + " EN " + country.upper() + ":")
+                printBestViews(result, int(number))
+
             result.clear()
 
     elif int(inputs[0]) == 3:

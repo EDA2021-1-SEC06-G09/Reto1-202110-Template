@@ -105,8 +105,6 @@ def getTrendCategory(catalog, category_id):
     sorted_list = sortVideoCategoryTitle(listcopy)
     posvideo = binarySearch(sorted_list, category_id, "category_id")
 
-    print(posvideo)
-
     first = False
     while posvideo > 1 and not first:
         if lt.getElement(sorted_list, posvideo-1)['category_id'] == category_id:

@@ -69,11 +69,18 @@ def printFirstVideo(catalog):
     
 
 def printBestViews(videos, number):
-    for n in range (1,number+1):
-        video = lt.getElement(videos, n)
-        print("\nDia de tendencia: " + video["trending_date"] + ", Titulo: " + video["title"] +
-            ", Canal: " + video["channel_title"] +", Tiempo de publicacion: " +video["publish_time"] +
-            ", Vistas: " + video["views"] + ", Likes: " + video["likes"] + ", Dislikes: " + video["dislikes"])
+    if lt.isEmpty(videos):
+        print("\nNo se encontro informacion para ese pais")
+    else:
+        if number < lt.size(videos):
+            toprange = number+1
+        else:
+            toprange = lt.size(videos)+1
+        for n in range (1,toprange):
+            video = lt.getElement(videos, n)
+            print("\nDia de tendencia: " + video["trending_date"] + ", Titulo: " + video["title"] +
+                ", Canal: " + video["channel_title"] +", Tiempo de publicacion: " +video["publish_time"] +
+                ", Vistas: " + video["views"] + ", Likes: " + video["likes"] + ", Dislikes: " + video["dislikes"])
 
 
 def printTrendCategory(result, category_id):
@@ -89,7 +96,7 @@ tipo = None
 
 while True:
     printMenu()
-    inputs = input('Seleccione una opción para continuar\n')
+    inputs = input('Seleccione una opción para continuar\nSeleccione cualquier otra tecla para salir\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
         catalog = initCatalog()

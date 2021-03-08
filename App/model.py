@@ -79,8 +79,24 @@ def getCategoryId(catalog, category_name):
 def getBestViews(catalog, category_id, country):
     listcopy = catalog["videos"].copy()
     sorted_list = sortVideoCountryCategory(listcopy)
+    posvideo = lt.binarySearch(sorted_list, country, "country")
 
-    return sortVideoViews(sorted_list)
+    first = False
+    while posvideo > 1 and not first:
+        if lt.getElement(sorted_list, posvideo-1)['country'] == country:
+            posvideo -= 1
+        else:
+            first = True
+
+    sub_list = lt.newList('ARRAY_LIST')
+    while lt.getElement(sorted_list, posvideo)['country'] == country:
+        if lt.getElement(sorted_list, posvideo)['category_id'] == category_id:
+            lt.addLast(sub_list, lt.getElement(sorted_list, posvideo))
+        elif not lt.isEmpty(sub_list):
+            return sub_list
+        posvideo += 1
+
+    return sub_list
 
 
 def getTrendCategory(catalog, category_id):
@@ -151,13 +167,8 @@ def cmpVideosByTrend(video1, video2):
 # Funciones de ordenamiento
 
 def sortVideoCountryCategory(videos):
-    return merge.sort(merge.sort(videos, cmpVideosByCategory), cmpVideosByCountry)
+    return merge.sort(merge.sort(merge.sort(videos, cmpVideosByViews), cmpVideosByCategory), cmpVideosByCountry)
 
 
 def sortVideoCategoryTitle(videos):
     return merge.sort(merge.sort(merge.sort(videos, cmpVideosByTrend), cmpVideosByTitle), cmpVideosByCategory)
-
-
-def sortVideoViews(listcopy):    
-    sorted_list = quick.sort(listcopy, cmpVideosByViews)
-    return sorted_list

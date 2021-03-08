@@ -228,7 +228,7 @@ def binarySearch(lst, elemento, dato):
         return pos
     except Exception as exp:
         error.reraise(exp, 'arrayList->binarySearch: ')
-        
+
 
 def deleteElement(lst, pos):
     """ Elimina el elemento en la posición pos de la lista.

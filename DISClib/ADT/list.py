@@ -200,6 +200,23 @@ def getElement(lst, pos):
         error.reraise(exp, 'List->getElement: ')
 
 
+def binarySearch(lst, elemento, dato):
+    """ Retorna la posicion de un elemento dado en la lista.
+
+    Args:
+        lst: La lista a examinar
+        elemento: El elemento que se esta buscando
+        dato: la llave en la cual esta guardado el tipo de elemento buscado
+
+    Raises:
+        Exception
+    """
+    try:
+        return lt.binarySearch(lst, elemento, dato)
+    except Exception as exp:
+        error.reraise(exp, 'List->binarySearch: ')
+
+
 def deleteElement(lst, pos):
     """ Elimina el elemento en la posición pos de la lista.
 

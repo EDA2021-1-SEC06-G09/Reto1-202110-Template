@@ -199,6 +199,37 @@ def getElement(lst, pos):
         error.reraise(exp, 'arraylist->getElement: ')
 
 
+def binarySearch(lst, elemento, dato):
+    """ Retorna la posicion de un elemento dado en la lista.
+
+    Args:
+        lst: La lista a examinar
+        elemento: El elemento que se esta buscando
+        dato: la llave en la cual esta guardado el tipo de elemento buscado
+
+    Raises:
+        Exception
+    """
+    try:
+        i = 1
+        f = size(lst)
+        pos = 0
+        found = False
+        while i <= f and not found:
+            m = (i+f)//2
+            mElement = getElement(lst, m)[dato]
+            if mElement == elemento:
+                pos = m
+                found = True
+            elif mElement > elemento:
+                f = m-1
+            else:
+                i = m+1
+        return pos
+    except Exception as exp:
+        error.reraise(exp, 'arrayList->binarySearch: ')
+        
+
 def deleteElement(lst, pos):
     """ Elimina el elemento en la posición pos de la lista.
 

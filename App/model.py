@@ -67,23 +67,6 @@ def newcategory(name, id):
 
 
 # Funciones de consulta
-def binarySearch(lst, elemento, dato):
-    i = 1
-    f = lt.size(lst)
-    pos = 0
-    found = False
-    while i <= f and not found:
-        m = (i+f)//2
-        mElement = lt.getElement(lst, m)[dato]
-        if mElement == elemento:
-            pos = m
-            found = True
-        elif mElement > elemento:
-            f = m-1
-        else:
-            i = m+1
-    return pos
-
 
 def getCategoryId(catalog, category_name):
     for n in range(1,lt.size(catalog["categories"])+1):
@@ -103,7 +86,7 @@ def getBestViews(catalog, category_id, country):
 def getTrendCategory(catalog, category_id):
     listcopy = catalog["videos"].copy()
     sorted_list = sortVideoCategoryTitle(listcopy)
-    posvideo = binarySearch(sorted_list, category_id, "category_id")
+    posvideo = lt.binarySearch(sorted_list, category_id, "category_id")
 
     first = False
     while posvideo > 1 and not first:

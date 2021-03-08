@@ -76,6 +76,12 @@ def printBestViews(videos, number):
             ", Vistas: " + video["views"] + ", Likes: " + video["likes"] + ", Dislikes: " + video["dislikes"])
 
 
+def printTrendCategory(result, category_id):
+    video = result[0]
+    print("\nTitulo: " + video["title"] + ", Canal: " + video["channel_title"] + ", ID de la categoria: " +
+        category_id + ", Numero de dias: " + str(result[1]))
+
+
 """
 Menu principal
 """
@@ -116,7 +122,13 @@ while True:
         pass
 
     elif int(inputs[0]) == 4:
-        pass
+        category_name = input("Nombre de la categoria a buscar: ")
+        category_id = getCategoryId(catalog, category_name)
+
+        if category_id != None:
+            result = controller.getTrendCategory(catalog, category_id)
+            printTrendCategory(result, category_id)
+
 
     elif int(inputs[0]) == 5:
         pass

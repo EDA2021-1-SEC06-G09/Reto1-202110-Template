@@ -67,17 +67,18 @@ def newcategory(name, id):
 
 
 # Funciones de consulta
-def binarySearch(lst, elemento):
-    i = 0
-    f = len(lst)-1
-    pos = -1
+def binarySearch(lst, elemento, dato):
+    i = 1
+    f = lt.size(lst)
+    pos = 0
     found = False
     while i <= f and not found:
         m = (i+f)//2
-        if lst[m] == elemento:
+        mElement = lt.getElement(lst, m)[dato]
+        if mElement == elemento:
             pos = m
             found = True
-        elif lst[m] > elemento:
+        elif mElement > elemento:
             f = m-1
         else:
             i = m+1
@@ -92,12 +93,51 @@ def getCategoryId(catalog, category_name):
     return None
 
 
-
 def getBestViews(catalog, category_id, country):
     listcopy = catalog["videos"].copy()
-    sorted_list = sortVideoCountry(listcopy)
+    sorted_list = sortVideoCountryCategory(listcopy)
 
     return sortVideoViews(sorted_list)
+
+
+def getTrendCategory(catalog, category_id):
+    listcopy = catalog["videos"].copy()
+    sorted_list = sortVideoCategoryTitle(listcopy)
+    posvideo = binarySearch(sorted_list, category_id, "category_id")
+
+    print(posvideo)
+
+    first = False
+    while posvideo > 1 and not first:
+        if lt.getElement(sorted_list, posvideo-1)['category_id'] == category_id:
+            posvideo -= 1
+        else:
+            first = True
+
+    postrend = posvideo
+    trendtitle = ""
+    trendcount = -1
+    count = 0
+    while lt.getElement(sorted_list, posvideo)['category_id'] == category_id:
+        if posvideo == 1:
+            trendtitle = lt.getElement(sorted_list, postrend)['title']
+        elif lt.getElement(sorted_list, posvideo)['title'] != lt.getElement(sorted_list, posvideo-1)['title']:
+            if count > trendcount:
+                trendcount = count
+                postrend = posvideo-1
+                trendtitle = lt.getElement(sorted_list, postrend)['title']
+            count = 1
+        elif (lt.getElement(sorted_list, posvideo)['trending_date'] != lt.getElement(sorted_list, posvideo-1)['trending_date']):
+            count += 1
+        posvideo += 1
+
+    video = lt.getElement(sorted_list, postrend)
+    sorted_list.clear()
+    return video, trendcount
+
+
+
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
@@ -111,14 +151,30 @@ def cmpVideosByViews(video1, video2):
     return (int(video1["views"]) > int(video2["views"]))
 
 
-def cmpVideosByCountryCategory(video1, video2):
-    return ((video1["country"] < video2["country"]) and (video1["category_id"] < video2["category_id"]))
+def cmpVideosByCategory(video1, video2):
+    return (int(video1["category_id"]) < int(video2["category_id"]))
+
+
+def cmpVideosByCountry(video1, video2):
+    return (video1["country"] < video2["country"])
+
+
+def cmpVideosByTitle(video1, video2):
+     return (video1["title"] < video2["title"])
+
+
+def cmpVideosByTrend(video1, video2):
+    return (video1['trending_date'] < video2['trending_date'])
 
 
 # Funciones de ordenamiento
 
-def sortVideoCountry(videos):
-    return merge.sort(videos, cmpVideosByCountryCategory)
+def sortVideoCountryCategory(videos):
+    return merge.sort(merge.sort(videos, cmpVideosByCategory), cmpVideosByCountry)
+
+
+def sortVideoCategoryTitle(videos):
+    return merge.sort(merge.sort(merge.sort(videos, cmpVideosByTrend), cmpVideosByTitle), cmpVideosByCategory)
 
 
 def sortVideoViews(listcopy):    

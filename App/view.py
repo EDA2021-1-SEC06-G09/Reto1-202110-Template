@@ -86,10 +86,18 @@ def printTrendCategory(result, category_id):
         category_id + ", Numero de dias: " + str(result[1]))
 
 
+def printTrendCountry(result):
+    video = result[0]
+    print("Titulo: " + video["title"] + ", Canal: " + video["channel_title"] + ", Pais: " + video["country"] + ", Numero de dias trending: " + str(result[1]))
+    
+
+
+
 """
 Menu principal
 """
 tipo = None
+
 
 while True:
     printMenu()
@@ -126,7 +134,13 @@ while True:
             result.clear()
 
     elif int(inputs[0]) == 3:
-        pass
+        country_name = input("Ingrese el nombre del pais a buscar: ")
+
+        if country_name != None:
+            result = controller.getTrendCountry(catalog, country_name)
+            printTrendCountry(result)
+            
+
 
     elif int(inputs[0]) == 4:
         category_name = input("Nombre de la categoria a buscar: ")

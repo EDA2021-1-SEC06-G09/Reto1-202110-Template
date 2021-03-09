@@ -103,7 +103,6 @@ def getTrendCategory(catalog, category_id):
     listcopy = catalog["videos"].copy()
     sorted_list = sortVideoCategoryTitle(listcopy)
     posvideo = lt.binarySearch(sorted_list, category_id, "category_id")
-
     first = False
     while posvideo > 1 and not first:
         if lt.getElement(sorted_list, posvideo-1)['category_id'] == category_id:
@@ -133,6 +132,75 @@ def getTrendCategory(catalog, category_id):
     return video, trendcount
 
 
+def getTrendCountry(catalog, country):
+    listcopy = catalog["videos"].copy()
+    sorted_list = sortVideoByCountry(listcopy)
+    posvideo = lt.binarySearch(sorted_list, country, "country")
+    first = False
+    while posvideo >= 1 and not first:
+        if lt.getElement(sorted_list, posvideo)["country"] == lt.getElement(sorted_list, posvideo-1)["country"]:
+            posvideo -=1
+        else:
+            first = True
+    
+    posicion = posvideo
+    conteo = 1
+    Last = False
+
+    while not Last and posicion < lt.size(sorted_list):
+        if lt.getElement(sorted_list, posicion)["country"] == lt.getElement(sorted_list, posicion+1)["country"]:
+            conteo += 1
+            posicion +=1
+        else:
+            Last = True
+    
+    CountryList = lt.subList(sorted_list, posvideo, conteo)
+    
+
+    SortedCountryList = sortVideoById(CountryList)
+
+    
+
+    histograma = {}
+    i = 0
+    while i < lt.size(SortedCountryList):
+        Url = lt.getElement(SortedCountryList, i)["video_id"]
+        histograma[Url] = histograma.get(Url, 0) +1
+        i +=1
+    
+
+    for Url in histograma:
+        mayor = max(histograma.values())
+        if(histograma[Url] == mayor):
+            UrlVideoTrend = Url
+
+    
+
+
+    posTrendVideo = lt.binarySearch(SortedCountryList, UrlVideoTrend, "video_id")
+
+
+
+    first = False
+    while posTrendVideo >= 1 and not first:
+        if lt.getElement(SortedCountryList, posTrendVideo)["video_id"] == lt.getElement(SortedCountryList, posTrendVideo-1)["video_id"]:
+            posTrendVideo -=1
+        else:
+            first = True
+    
+    posicion = posTrendVideo
+    conteo = 1
+    Last = False
+
+    while not Last and posicion < lt.size(SortedCountryList):
+        if lt.getElement(SortedCountryList, posicion)["video_id"] == lt.getElement(SortedCountryList, posicion+1)["video_id"]:
+            conteo += 1
+            posicion +=1
+        else:
+            Last = True
+    
+
+    return lt.getElement(SortedCountryList, posTrendVideo),  conteo
 
 
 
@@ -163,6 +231,8 @@ def cmpVideosByTitle(video1, video2):
 def cmpVideosByTrend(video1, video2):
     return (video1['trending_date'] < video2['trending_date'])
 
+def cmpVideosById(video1, video2):
+    return (video1["video_id"] < video2["video_id"])
 
 # Funciones de ordenamiento
 
@@ -172,3 +242,11 @@ def sortVideoCountryCategory(videos):
 
 def sortVideoCategoryTitle(videos):
     return merge.sort(merge.sort(merge.sort(videos, cmpVideosByTrend), cmpVideosByTitle), cmpVideosByCategory)
+
+def sortVideoByCountry(videos):
+    result = merge.sort(videos, cmpVideosByCountry)
+    return result
+
+def sortVideoById(videos):
+    result = merge.sort(videos, cmpVideosById)
+    return result

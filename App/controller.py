@@ -63,3 +63,6 @@ def getBestViews(catalog, category_id, country):
 
 def getTrendCategory(catalog, category_id):
     return model.getTrendCategory(catalog, category_id)
+
+def getTrendCountry(catalog, country):
+    return model.getTrendCountry(catalog, country)

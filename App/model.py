@@ -36,6 +36,7 @@ import time
 
 
 # Construccion de modelos
+
 def newCatalog():
     catalog = {'videos': None,
                'categories': None}
@@ -45,7 +46,9 @@ def newCatalog():
 
     return catalog
 
+
 # Funciones para agregar informacion al catalogo
+
 def addvideo(catalog, video):
     lt.addLast(catalog["videos"], video)
 
@@ -59,6 +62,7 @@ def addcategory(catalog, cat):
 
 
 # Funciones para creacion de datos
+
 def newcategory(name, id):
     cat = {"id": "", "name":""}
     cat["id"] = id
@@ -153,13 +157,10 @@ def getTrendCountry(catalog, country):
             posicion +=1
         else:
             Last = True
-    
+
     CountryList = lt.subList(sorted_list, posvideo, conteo)
-    
 
     SortedCountryList = sortVideoById(CountryList)
-
-    
 
     histograma = {}
     i = 0
@@ -167,27 +168,21 @@ def getTrendCountry(catalog, country):
         Url = lt.getElement(SortedCountryList, i)["video_id"]
         histograma[Url] = histograma.get(Url, 0) +1
         i +=1
-    
 
     for Url in histograma:
         mayor = max(histograma.values())
         if(histograma[Url] == mayor):
             UrlVideoTrend = Url
 
-    
-
-
     posTrendVideo = lt.binarySearch(SortedCountryList, UrlVideoTrend, "video_id")
 
-
-
     first = False
-    while posTrendVideo >= 1 and not first:
+    while posTrendVideo > 1 and not first:
         if lt.getElement(SortedCountryList, posTrendVideo)["video_id"] == lt.getElement(SortedCountryList, posTrendVideo-1)["video_id"]:
             posTrendVideo -=1
         else:
             first = True
-    
+
     posicion = posTrendVideo
     conteo = 1
     Last = False
@@ -198,10 +193,8 @@ def getTrendCountry(catalog, country):
             posicion +=1
         else:
             Last = True
-    
 
     return lt.getElement(SortedCountryList, posTrendVideo),  conteo
-
 
 
 # Funciones utilizadas para comparar elementos dentro de una lista
@@ -233,6 +226,7 @@ def cmpVideosByTrend(video1, video2):
 
 def cmpVideosById(video1, video2):
     return (video1["video_id"] < video2["video_id"])
+
 
 # Funciones de ordenamiento
 

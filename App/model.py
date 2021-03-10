@@ -63,6 +63,13 @@ def addcategory(catalog, cat):
 
 # Funciones para creacion de datos
 
+def newTag(name):
+    tag = {'name': "", 'videos': None}
+    tag['name'] = name
+    tag['videos'] = lt.newList('ARRAY_LIST')
+    return tag
+
+
 def newcategory(name, id):
     cat = {"id": "", "name":""}
     cat["id"] = id
@@ -197,7 +204,68 @@ def getTrendCountry(catalog, country):
     return lt.getElement(SortedCountryList, posTrendVideo),  conteo
 
 
+def getBestTag(catalog, tagname, country):
+    listcopy = catalog["videos"].copy()
+    sorted_list = sortVideoByCountry(listcopy)
+    posvideo = lt.binarySearch(sorted_list, country, "country")
+    first = False
+    while posvideo >= 1 and not first:
+        if lt.getElement(sorted_list, posvideo)["country"] == lt.getElement(sorted_list, posvideo-1)["country"]:
+            posvideo -=1
+        else:
+            first = True
+    
+    pos = posvideo
+    count = 1
+    last = False
+
+    while not last and pos < lt.size(sorted_list):
+        if lt.getElement(sorted_list, pos)["country"] == lt.getElement(sorted_list, pos+1)["country"]:
+            count += 1
+            pos +=1
+        else:
+            last = True
+
+    CountryList = lt.subList(sorted_list, posvideo, count)
+
+    taglist = lt.newList('ARRAY_LIST', cmpfunction=comparetags)
+
+    for n in range(1, lt.size(CountryList)+1):
+        video = lt.getElement(CountryList, n)
+        videotags = video['tags'].split('"|"')
+        for videotag in videotags:
+            addVideoTags(taglist, videotag.strip('"'), video)
+
+    tagpos = lt.isPresent(taglist, tagname)
+
+    if tagpos > 0:
+        videos = lt.getElement(taglist, tagpos)['videos']
+        return sortVideoByViews(videos)
+    else:
+        return None
+
+
+def addVideoTags(taglist, tagname, video):
+    postag = lt.isPresent(taglist, tagname)
+    if postag > 0:
+        tag = lt.getElement(taglist, postag)
+    else:
+        tag = newTag(tagname)
+        lt.addLast(taglist, tag)
+    lt.addLast(tag['videos'], video)
+
+
 # Funciones utilizadas para comparar elementos dentro de una lista
+
+def comparetags(tag1, tag):
+    if (tag1.lower() in tag['name'].lower()):
+        return 0
+    return -1
+
+
+def organizetags(tag1, tag2):
+    return (tag1["name"] < tag2["name"])
+
 
 def comparecat(cat1, cat):
     if (cat1 in cat['id']):
@@ -244,3 +312,6 @@ def sortVideoByCountry(videos):
 def sortVideoById(videos):
     result = merge.sort(videos, cmpVideosById)
     return result
+
+def sortVideoByViews(videos):
+    return merge.sort(videos, cmpVideosByViews)

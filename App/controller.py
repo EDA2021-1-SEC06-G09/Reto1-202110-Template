@@ -66,3 +66,6 @@ def getTrendCategory(catalog, category_id):
 
 def getTrendCountry(catalog, country):
     return model.getTrendCountry(catalog, country)
+
+def getBestTag(catalog, tag, country):
+    return model.getBestTag(catalog, tag, country)

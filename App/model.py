@@ -168,16 +168,12 @@ def getTrendCountry(catalog, country):
         histograma[Url] = histograma.get(Url, 0) +1
         i +=1
     
-    
-
-    print(histograma)
-    print(str(max(histograma.values())))
     mayor = max(histograma.values())
 
     for Url in histograma:
         if(histograma[Url] == mayor):
-            print("hola")
             UrlVideoTrend = Url
+            break
 
     posTrendVideo = lt.binarySearch(SortedCountryList, UrlVideoTrend, "video_id")
 

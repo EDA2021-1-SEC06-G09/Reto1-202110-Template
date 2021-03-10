@@ -159,48 +159,29 @@ def getTrendCountry(catalog, country):
 
     SortedCountryList = sortVideoById(CountryList)
 
-    
 
     histograma = {}
     i = 0
     while i < lt.size(SortedCountryList):
+
         Url = lt.getElement(SortedCountryList, i)["video_id"]
         histograma[Url] = histograma.get(Url, 0) +1
         i +=1
     
-
-    for Url in histograma:
-        mayor = max(histograma.values())
-        if(histograma[Url] == mayor):
-            UrlVideoTrend = Url
-
     
 
+    print(histograma)
+    print(str(max(histograma.values())))
+    mayor = max(histograma.values())
+
+    for Url in histograma:
+        if(histograma[Url] == mayor):
+            print("hola")
+            UrlVideoTrend = Url
 
     posTrendVideo = lt.binarySearch(SortedCountryList, UrlVideoTrend, "video_id")
 
-
-
-    first = False
-    while posTrendVideo >= 1 and not first:
-        if lt.getElement(SortedCountryList, posTrendVideo)["video_id"] == lt.getElement(SortedCountryList, posTrendVideo-1)["video_id"]:
-            posTrendVideo -=1
-        else:
-            first = True
-    
-    posicion = posTrendVideo
-    conteo = 1
-    Last = False
-
-    while not Last and posicion < lt.size(SortedCountryList):
-        if lt.getElement(SortedCountryList, posicion)["video_id"] == lt.getElement(SortedCountryList, posicion+1)["video_id"]:
-            conteo += 1
-            posicion +=1
-        else:
-            Last = True
-    
-
-    return lt.getElement(SortedCountryList, posTrendVideo),  conteo
+    return lt.getElement(SortedCountryList, posTrendVideo),  mayor
 
 
 
@@ -249,4 +230,8 @@ def sortVideoByCountry(videos):
 
 def sortVideoById(videos):
     result = merge.sort(videos, cmpVideosById)
+    return result
+
+def sortVideoByTitle(videos):
+    result = merge.sort(videos, cmpVideosByTitle)
     return result

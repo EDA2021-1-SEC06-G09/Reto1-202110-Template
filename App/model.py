@@ -116,13 +116,16 @@ def getBestViews(catalog, category_id, country):
 def getTrendCategory(catalog, category_id):
     listcopy = catalog["videos"].copy()
     sorted_list = sortVideoCategoryTitle(listcopy)
+    #uso de merge: O(nlog(n)) por merge (3 merge usados)
     posvideo = lt.binarySearch(sorted_list, category_id, "category_id")
+    #busqueda binaria: O(log(n))
     first = False
     while posvideo > 1 and not first:
         if lt.getElement(sorted_list, posvideo-1)['category_id'] == category_id:
             posvideo -= 1
         else:
             first = True
+    #en el peor de los casos recorre O(m) donde m es igual al número total de videos que hay en esa categoría
 
     postrend = posvideo
     trendtitle = ""
@@ -140,7 +143,8 @@ def getTrendCategory(catalog, category_id):
         elif (lt.getElement(sorted_list, posvideo)['trending_date'] != lt.getElement(sorted_list, posvideo-1)['trending_date']):
             count += 1
         posvideo += 1
-
+    #O(m)
+    
     video = lt.getElement(sorted_list, postrend)
     sorted_list.clear()
     return video, trendcount
@@ -203,13 +207,16 @@ def getTrendCountry(catalog, country):
 def getBestTag(catalog, tagname, country):
     listcopy = catalog["videos"].copy()
     sorted_list = sortVideoByCountry(listcopy)
+    #uso de merge: O(nlog(n))
     posvideo = lt.binarySearch(sorted_list, country, "country")
+    #busqueda binaria: O(log(n))
     first = False
     while posvideo >= 1 and not first:
         if lt.getElement(sorted_list, posvideo)["country"] == lt.getElement(sorted_list, posvideo-1)["country"]:
             posvideo -=1
         else:
             first = True
+    #en el peor de los casos recorre O(m) donde m es igual al número total de videos que hay para ese país
     
     pos = posvideo
     count = 1
@@ -221,7 +228,8 @@ def getBestTag(catalog, tagname, country):
             pos +=1
         else:
             last = True
-
+    #O(m)
+    
     CountryList = lt.subList(sorted_list, posvideo, count)
 
     taglist = lt.newList('ARRAY_LIST', cmpfunction=comparetags)
@@ -231,6 +239,8 @@ def getBestTag(catalog, tagname, country):
         videotags = video['tags'].split('"|"')
         for videotag in videotags:
             addVideoTags(taglist, videotag.strip('"'), video)
+            #O(l) donde l es el numero de tags del video
+    #O(m)
 
     tagpos = lt.isPresent(taglist, tagname)
 
@@ -311,7 +321,7 @@ def sortVideoById(videos):
 
 def sortVideoByViews(videos):
     return merge.sort(videos, cmpVideosByViews)
-    
+
 def sortVideoByTitle(videos):
     result = merge.sort(videos, cmpVideosByTitle)
     return result

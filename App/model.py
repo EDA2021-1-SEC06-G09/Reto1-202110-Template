@@ -90,6 +90,7 @@ def getCategoryId(catalog, category_name):
 def getBestViews(catalog, category_id, country):
     listcopy = catalog["videos"].copy()
     sorted_list = sortVideoCountryCategory(listcopy)
+    #uso de merge: nlog(n)
     posvideo = lt.binarySearch(sorted_list, country, "country")
 
     first = False
@@ -98,6 +99,7 @@ def getBestViews(catalog, category_id, country):
             posvideo -= 1
         else:
             first = True
+    #es para ubicar el primer elemento de la lista de pais en especifico, hay 10 paises -> maximo n/10 
 
     sub_list = lt.newList('ARRAY_LIST')
     while lt.getElement(sorted_list, posvideo)['country'] == country:
@@ -106,6 +108,7 @@ def getBestViews(catalog, category_id, country):
         elif not lt.isEmpty(sub_list):
             return sub_list
         posvideo += 1
+    #recorre unicamente mientras no cambiemos de pais -> n/10
 
     return sub_list
 
@@ -145,15 +148,19 @@ def getTrendCategory(catalog, category_id):
 
 def getTrendCountry(catalog, country):
     listcopy = catalog["videos"].copy()
+
     sorted_list = sortVideoByCountry(listcopy)
+    #uso de merge: nlog(n)
     posvideo = lt.binarySearch(sorted_list, country, "country")
+    #busqueda binaria: log(n)
     first = False
+
     while posvideo >= 1 and not first:
         if lt.getElement(sorted_list, posvideo)["country"] == lt.getElement(sorted_list, posvideo-1)["country"]:
             posvideo -=1
         else:
             first = True
-    
+    #es para ubicar el primer elemento de la lista de pais en especifico, hay 10 paises -> maximo n/10 
     posicion = posvideo
     conteo = 1
     Last = False
@@ -164,44 +171,33 @@ def getTrendCountry(catalog, country):
             posicion +=1
         else:
             Last = True
-
+    #cuenta videos de un pais -> n/10
     CountryList = lt.subList(sorted_list, posvideo, conteo)
+    #n/10
+    
 
     SortedCountryList = sortVideoById(CountryList)
+    #n/10
 
     histograma = {}
     i = 0
     while i < lt.size(SortedCountryList):
+
         Url = lt.getElement(SortedCountryList, i)["video_id"]
         histograma[Url] = histograma.get(Url, 0) +1
         i +=1
+    #n/10
+    
+    mayor = max(histograma.values())
 
     for Url in histograma:
-        mayor = max(histograma.values())
         if(histograma[Url] == mayor):
             UrlVideoTrend = Url
-
+            break
+    #n/10
     posTrendVideo = lt.binarySearch(SortedCountryList, UrlVideoTrend, "video_id")
 
-    first = False
-    while posTrendVideo > 1 and not first:
-        if lt.getElement(SortedCountryList, posTrendVideo)["video_id"] == lt.getElement(SortedCountryList, posTrendVideo-1)["video_id"]:
-            posTrendVideo -=1
-        else:
-            first = True
-
-    posicion = posTrendVideo
-    conteo = 1
-    Last = False
-
-    while not Last and posicion < lt.size(SortedCountryList):
-        if lt.getElement(SortedCountryList, posicion)["video_id"] == lt.getElement(SortedCountryList, posicion+1)["video_id"]:
-            conteo += 1
-            posicion +=1
-        else:
-            Last = True
-
-    return lt.getElement(SortedCountryList, posTrendVideo),  conteo
+    return lt.getElement(SortedCountryList, posTrendVideo),  mayor
 
 
 def getBestTag(catalog, tagname, country):
@@ -315,3 +311,7 @@ def sortVideoById(videos):
 
 def sortVideoByViews(videos):
     return merge.sort(videos, cmpVideosByViews)
+    
+def sortVideoByTitle(videos):
+    result = merge.sort(videos, cmpVideosByTitle)
+    return result
